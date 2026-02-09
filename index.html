@@ -1,4 +1,4 @@
-<meta name='viewport' content='width=device-width, initial-scale=1'/><!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
@@ -126,51 +126,51 @@ I’ll just be the one who’s always there, supporting you.
   </div>
 
   <script>
-    // Initialize EmailJS (REPLACE WITH YOUR PUBLIC KEY)
-    emailjs.init('h4w0Dw31TxrJDB-0e');
+  function respond(answer) {
+  const response = document.getElementById('response');
+  const signature = document.querySelector('.signature');
 
-    const responses = {
-      Yes: "i'm glad that you accept my delight. i won't miss this chance, i promise you. <33",
-      Maybe: "don't worry, it's okay. i have no intention to pressure you anyway. thanks for giving this a time. ;))",
-      No: "that's okay, atleast you try to find time to this. it hurts, but i'll be happy to whatever you chose. :))"
-    };
+  localStorage.setItem('valentineAnswer', answer);
 
-    function respond(answer) {
-      const response = document.getElementById('response');
-      const signature = document.querySelector('.signature');
+  if (answer === 'yes') {
+    response.innerText = "i'm glad that you accept my delight. i won't miss this chance, i promise you. <33";
+  } else if (answer === 'maybe') {
+    response.innerText = "don't worry, it's okay. i have no intention to pressure you anyway. thanks for giving this a time. ;))";
+  } else {
+    response.innerText = "that's okay, atleast you try to find time to this. it hurts, but i'll be happy to whatever you chose. :))";
+  }
 
-      response.innerText = responses[answer];
+  signature.style.display = 'block';
+  signature.classList.add('fade-in');
 
-      // Send email
-      emailjs.send('YOUR_SERVICE_ID', 'template_6786d8w', {
-        to_email: 'delacruzrevi@gmail.com',
-        answer: answer
-      });
+  // auto email the answer
+  emailjs.send('YOUR_SERVICE_ID', 'template_6786d8w', {
+    to_email: 'delacruzrevi@gmail.com',
+    answer: answer
+  }).then(() => {
+    console.log('Answer emailed successfully');
+  }).catch(err => {
+    console.error('Email failed', err);
+  });
+}
 
-      signature.style.display = 'block';
-      signature.classList.add('fade-in');
+  function shareAnswer() {
+    const answer = localStorage.getItem('valentineAnswer');
+    if (!answer) return alert('No answer yet 💌');
 
-      document.querySelectorAll('button').forEach(btn => btn.disabled = true);
+    const text = `I answered: ${answer} 💌`;
+    if (navigator.share) {
+      navigator.share({ text });
+    } else {
+      navigator.clipboard.writeText(text);
+      alert('Answer copied! You can now paste and share it 💗');
     }
-  </script>
-</body>
-</html>
-swer');
-      const text = `I answered: ${answer} 💌`;
+  }
 
-      if (navigator.share) {
-        navigator.share({ text });
-      } else {
-        navigator.clipboard.writeText(text);
-        alert('Answer copied! You can now paste and share it 💗');
-      }
-    }
-
-    // Restore saved answer if page reloads
-    window.onload = () => {
-      const saved = localStorage.getItem('valentineAnswer');
-      if (saved) respond(saved);
-    };
-  </script>
+  window.onload = () => {
+    const saved = localStorage.getItem('valentineAnswer');
+    if (saved) respond(saved);
+  };
+</script>
 </body>
 </html>
